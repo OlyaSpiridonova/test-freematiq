@@ -1,7 +1,5 @@
 import {
-  Typography,
   Grid,
-  Icon,
   TableContainer,
   TableHead,
   Table,
@@ -9,27 +7,30 @@ import {
   TableRow,
   Paper,
   TableBody,
+  Icon,
+  Button,
+  styled,
 } from '@mui/material';
 
+import Flag from 'react-world-flags';
+import { useDispatch, useSelector } from 'react-redux';
+import { currencyFavorite } from '../../store/favorites/actions';
+
+export const TableCellCentered = styled(TableCell)`
+  text-align: center;
+`;
+
 function FavoritesCurrenciesList() {
-  const defaultPairs = [
-    {
-      codeOut: 'RUB',
-      valuteOut: 'Рубль РФ',
-      unit: '1',
-      codeIN: 'USD',
-      valuteIn: 'Доллар США',
-      course: '70.5',
-    },
-    {
-      codeOut: 'RUB',
-      valuteOut: 'Рубль РФ',
-      unit: '1',
-      codeIN: 'EUR',
-      valuteIn: 'Евро ЕС',
-      course: '80.5',
-    },
-  ];
+  const { currencyFavoriteItems } = useSelector(
+    (state) => state.currencyFavorite
+  );
+  const dispatch = useDispatch();
+
+  const handleClickDelete = (currencyPair) => {
+    dispatch(currencyFavorite.deleteCurrencyFavorite(currencyPair.id));
+    console.log('delete');
+  };
+
   return (
     <>
       <Grid item xs={12} md={12} mt={5}>
@@ -37,24 +38,63 @@ function FavoritesCurrenciesList() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Буквенный код</TableCell>
-                <TableCell>Валюта</TableCell>
-                <TableCell>Единиц</TableCell>
-                <TableCell>Буквенный код</TableCell>
-                <TableCell>Валюта</TableCell>
-                <TableCell>Курс</TableCell>
+                <TableCellCentered>Буквенный код</TableCellCentered>
+                <TableCellCentered>Валюта</TableCellCentered>
+                <TableCellCentered>Единиц</TableCellCentered>
+                <TableCellCentered>Буквенный код</TableCellCentered>
+                <TableCellCentered>Валюта</TableCellCentered>
+                <TableCellCentered>Курс</TableCellCentered>
+                <TableCellCentered></TableCellCentered>
               </TableRow>
             </TableHead>
             <TableBody>
-              {defaultPairs.map(
-                ({ codeOut, codeIN, unit, valuteOut, valuteIn, course }) => (
-                  <TableRow key={codeIN}>
-                    <TableCell>{codeIN}</TableCell>
-                    <TableCell>{valuteIn}</TableCell>
-                    <TableCell>{unit}</TableCell>
-                    <TableCell>{codeOut}</TableCell>
-                    <TableCell>{valuteOut}</TableCell>
-                    <TableCell>{course}</TableCell>
+              {currencyFavoriteItems.map(
+                ({
+                  id,
+                  codeOut,
+                  codeIN,
+                  flagOut,
+                  symbolOut,
+                  unit,
+                  valuteOut,
+                  valuteIn,
+                  flagIn,
+                  symbolIn,
+                  course,
+                }) => (
+                  <TableRow key={id}>
+                    <TableCellCentered>
+                      <Flag
+                        code={flagIn}
+                        height="16"
+                        fallback={<Icon>flag</Icon>}
+                      />{' '}
+                      {codeIN}
+                    </TableCellCentered>
+                    <TableCellCentered>
+                      {valuteIn}, {symbolIn}
+                    </TableCellCentered>
+                    <TableCellCentered>{unit}</TableCellCentered>
+                    <TableCellCentered>
+                      <Flag
+                        code={flagOut}
+                        height="16"
+                        fallback={<Icon>flag</Icon>}
+                      />{' '}
+                      {codeOut}
+                    </TableCellCentered>
+                    <TableCellCentered>
+                      {valuteOut}, {symbolOut}
+                    </TableCellCentered>
+                    <TableCellCentered>{course}</TableCellCentered>
+                    <TableCellCentered>
+                      <Button
+                        onClick={() => handleClickDelete({ id })}
+                        variant="contained"
+                      >
+                        Очистить
+                      </Button>
+                    </TableCellCentered>
                   </TableRow>
                 )
               )}

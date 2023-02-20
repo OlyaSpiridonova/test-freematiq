@@ -1,48 +1,71 @@
-import {
-  Select,
-  Grid,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Icon,
-  Typography,
-  Button,
-} from '@mui/material';
+import { useState } from 'react';
+import { Grid, Button } from '@mui/material';
+import CurrencySelect from '../currency-select/currency-select';
+import { useDispatch, useSelector } from 'react-redux';
+import { currencyFavorite } from '../../store/favorites/actions';
 
-function СurrencyЗairs() {
+function СurrencyPairs() {
+  const [currencuIn, setCurrencuIn] = useState('');
+  const [currencuOut, setCurrencuOut] = useState('');
+
+  const { currencyList } = useSelector((state) => state.currency);
+  const dispatch = useDispatch();
+
+  function currencyData() {
+    if (!currencuIn || !currencuOut) return;
+    const dataCurrencyIn = currencyList.find(
+      (item) => item.CharCode === currencuIn
+    );
+    const dataCurrencyOut = currencyList.find(
+      (item) => item.CharCode === currencuOut
+    );
+    const curencyPair = {
+      id: dataCurrencyOut.ID + dataCurrencyIn.ID,
+      codeOut: dataCurrencyOut.CharCode,
+      valuteOut: dataCurrencyOut.Name,
+      flagOut: dataCurrencyOut.flag,
+      symbolOut: dataCurrencyOut.symbol,
+      unit: dataCurrencyOut.Nominal,
+      codeIN: dataCurrencyIn.CharCode,
+      valuteIn: dataCurrencyIn.Name,
+      flagIn: dataCurrencyIn.flag,
+      symbolIn: dataCurrencyIn.symbol,
+      course: (dataCurrencyIn.Value / dataCurrencyOut.Value).toFixed(4), //Рассчитать
+    };
+    return curencyPair;
+  }
+
+  const addPair = () => {
+    if (!currencuIn || !currencuOut) {
+      alert('Сначала выберите пару');
+    }
+    dispatch(currencyFavorite.setCurrencyFavorite(currencyData()));
+    console.log('Новая пара', currencuIn, currencuOut);
+  };
+
   return (
     <>
-      <Typography component="h1" variant="h4" my={3}>
-        Избранные валютные пары
-      </Typography>
-      <Grid justifyContent="center" container>
-        <Grid item container md={12}>
-          <Grid item md={5}>
-            <FormControl variant="standard" sx={{ minWidth: 150 }}>
-              <InputLabel id="curency-in">У меня есть</InputLabel>
-              <Select labelId="curency-in" mx={3}>
-                <MenuItem value={'RUB'}>RUB</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item md={5}>
-            <FormControl variant="standard" sx={{ minWidth: 150 }}>
-              <InputLabel id="curency-out">Хочу получить</InputLabel>
-              <Select labelId="curency-out" mx={3}>
-                <MenuItem value={'USD'}>
-                  <Icon fontSize="large">flag</Icon>
-                  USD
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item md={2}>
-            <Button variant="contained">Добавить пару</Button>
-          </Grid>
-        </Grid>
+      <Grid item md={5}>
+        <CurrencySelect
+          charCode={currencuIn}
+          setValue={setCurrencuIn}
+          type={'in'}
+        />
+      </Grid>
+      <Grid item md={5}>
+        <CurrencySelect
+          charCode={currencuOut}
+          setValue={setCurrencuOut}
+          type={'out'}
+        />
+      </Grid>
+      <Grid item md={2}>
+        <Button onClick={addPair} variant="contained">
+          Добавить пару
+        </Button>
       </Grid>
     </>
   );
 }
 
-export default СurrencyЗairs;
+export default СurrencyPairs;

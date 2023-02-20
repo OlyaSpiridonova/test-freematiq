@@ -1,14 +1,5 @@
-import {
-  Select,
-  Grid,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Icon,
-  Typography,
-  Button,
-} from '@mui/material';
-import СurrencySelect from '../currency-select/currency-select';
+import { Grid, Typography } from '@mui/material';
+import CurrencyPairs from '../currency-pairs/currency-pairs';
 import FavoritesCurrenciesList from '../favorites-currencies-list/favorites-currencies-list';
 
 function FavoritesCurrencies() {
@@ -19,15 +10,7 @@ function FavoritesCurrencies() {
       </Typography>
       <Grid justifyContent="center" container>
         <Grid item container md={8}>
-          <Grid item md={5}>
-            <СurrencySelect type={'in'} />
-          </Grid>
-          <Grid item md={5}>
-            <СurrencySelect type={'out'} />
-          </Grid>
-          <Grid item md={2}>
-            <Button variant="contained">Добавить пару</Button>
-          </Grid>
+          <CurrencyPairs />
         </Grid>
         <FavoritesCurrenciesList />
       </Grid>

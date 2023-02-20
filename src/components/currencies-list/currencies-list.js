@@ -1,3 +1,8 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import Flag from 'react-world-flags';
+import { createCurrencyList } from '../../services/getCurency';
+import { currencyActions } from '../../store/currency/actions';
 import {
   Typography,
   Grid,
@@ -9,9 +14,29 @@ import {
   TableRow,
   Paper,
   TableBody,
+  styled,
 } from '@mui/material';
 
+export const TableCellCentered = styled(TableCell)`
+  text-align: center;
+`;
+
 function CurrenciesList() {
+  const dispatch = useDispatch();
+  const { currencyList } = useSelector((state) => state.currency);
+
+  useEffect(() => {
+    createCurrencyList()
+      .then((newList) => {
+        dispatch(currencyActions.setCurrencyList(newList));
+      })
+      .catch(() => {
+        alert('Извините, сервис курсов валют недоступен');
+      });
+    //eslint-disable-next-line
+  }, []);
+
+  console.log(currencyList);
   return (
     <>
       <Typography component="h1" variant="h4" my={3}>
@@ -22,27 +47,39 @@ function CurrenciesList() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Флаг</TableCell>
-                <TableCell>Символ</TableCell>
-                <TableCell>Буквенный код</TableCell>
-                <TableCell>Единиц</TableCell>
-                <TableCell>Валюта</TableCell>
-                <TableCell>Курс</TableCell>
+                <TableCellCentered>Флаг</TableCellCentered>
+                <TableCellCentered>Символ</TableCellCentered>
+                <TableCellCentered>Буквенный код</TableCellCentered>
+                <TableCellCentered>Единиц</TableCellCentered>
+                <TableCellCentered>Валюта</TableCellCentered>
+                <TableCellCentered>Курс</TableCellCentered>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Icon>flag</Icon>
-                </TableCell>
-                <TableCell>
-                  <Icon>money</Icon>
-                </TableCell>
-                <TableCell>USD</TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>Доллар США</TableCell>
-                <TableCell>70,5</TableCell>
-              </TableRow>
+              {currencyList.map(
+                ({ CharCode, Nominal, Name, Value, flag, symbol }) => (
+                  <TableRow key={Name + 'key'}>
+                    <TableCellCentered>
+                      <Flag
+                        code={flag}
+                        height="16"
+                        fallback={<Icon>flag</Icon>}
+                      />
+                    </TableCellCentered>
+                    <TableCellCentered>
+                      {symbol ? (
+                        <Typography variant="h5">{symbol}</Typography>
+                      ) : (
+                        <Icon>toll</Icon>
+                      )}
+                    </TableCellCentered>
+                    <TableCellCentered>{CharCode}</TableCellCentered>
+                    <TableCellCentered>{Nominal}</TableCellCentered>
+                    <TableCellCentered>{Name}</TableCellCentered>
+                    <TableCellCentered>{Value}</TableCellCentered>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </TableContainer>
