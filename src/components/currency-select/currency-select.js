@@ -34,7 +34,7 @@ function СurrencySelect({ type, setValue, charCode }) {
               value={CharCode}
               sx={{ backgroundColor: 'rgba(211, 211, 211, 0.4)' }}
             >
-              <Grid container>
+              <Grid spacing={2} container>
                 <Grid item md={4}>
                   {CharCode}
                 </Grid>

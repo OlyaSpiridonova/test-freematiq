@@ -76,22 +76,22 @@ function Converter() {
         Конвертер курса валют
       </Typography>
       <Grid justifyContent="center" container>
-        <Grid item container md={9}>
-          <Grid item md={6}>
+        <Grid justifyContent="center" item container md={9} xs={4} spacing={3}>
+          <Grid justifyContent="center" item md={6}>
             <СurrencySelect
               charCode={currencyData.charCodeIn}
               setValue={setCharCodeIn}
               type={'in'}
             />
           </Grid>
-          <Grid item md={6}>
+          <Grid justifyContent="center" item md={6}>
             <СurrencySelect
               charCode={currencyData.charCodeOut}
               setValue={setCharCodeOut}
               type={'out'}
             />
           </Grid>
-          <Grid item container mt={5}>
+          <Grid justifyContent="center" item container mt={5}>
             <Grid item md={5}>
               <ConverterInput
                 setAmount={setAmountIn}

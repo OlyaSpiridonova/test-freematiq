@@ -3,59 +3,59 @@ import { Grid, Button } from '@mui/material';
 import CurrencySelect from '../currency-select/currency-select';
 import { useDispatch, useSelector } from 'react-redux';
 import { currencyFavorite } from '../../store/favorites/actions';
+import { defineRate } from '../../services/calculateSum';
 
 function СurrencyPairs() {
-  const [currencuIn, setCurrencuIn] = useState('');
-  const [currencuOut, setCurrencuOut] = useState('');
+  const [currencyIn, setCurrencyIn] = useState('');
+  const [currencyOut, setCurrencyOut] = useState('');
 
   const { currencyList } = useSelector((state) => state.currency);
   const dispatch = useDispatch();
 
+  function defineCurrencyByCode(code) {
+    return currencyList.find((item) => item.CharCode === code);
+  }
+
   function currencyData() {
-    if (!currencuIn || !currencuOut) return;
-    const dataCurrencyIn = currencyList.find(
-      (item) => item.CharCode === currencuIn
-    );
-    const dataCurrencyOut = currencyList.find(
-      (item) => item.CharCode === currencuOut
-    );
-    const curencyPair = {
-      id: dataCurrencyOut.ID + dataCurrencyIn.ID,
-      codeOut: dataCurrencyOut.CharCode,
-      valuteOut: dataCurrencyOut.Name,
-      flagOut: dataCurrencyOut.flag,
-      symbolOut: dataCurrencyOut.symbol,
-      unit: dataCurrencyOut.Nominal,
-      codeIN: dataCurrencyIn.CharCode,
-      valuteIn: dataCurrencyIn.Name,
-      flagIn: dataCurrencyIn.flag,
-      symbolIn: dataCurrencyIn.symbol,
-      course: (dataCurrencyIn.Value / dataCurrencyOut.Value).toFixed(4), //Рассчитать
+    console.log(currencyIn);
+    console.log(defineCurrencyByCode(currencyIn));
+    return {
+      id:
+        defineCurrencyByCode(currencyOut).ID +
+        defineCurrencyByCode(currencyIn).ID,
+      codeOut: currencyOut,
+      valuteOut: defineCurrencyByCode(currencyOut).Name,
+      flagOut: defineCurrencyByCode(currencyOut).flag,
+      symbolOut: defineCurrencyByCode(currencyOut).symbol,
+      unit: 1,
+      codeIn: currencyIn,
+      valuteIn: defineCurrencyByCode(currencyIn).Name,
+      flagIn: defineCurrencyByCode(currencyIn).flag,
+      symbolIn: defineCurrencyByCode(currencyIn).symbol,
+      course: defineRate(currencyIn, currencyOut, currencyList),
     };
-    return curencyPair;
   }
 
   const addPair = () => {
-    if (!currencuIn || !currencuOut) {
+    if (!currencyIn || !currencyOut) {
       alert('Сначала выберите пару');
     }
     dispatch(currencyFavorite.setCurrencyFavorite(currencyData()));
-    console.log('Новая пара', currencuIn, currencuOut);
   };
 
   return (
     <>
       <Grid item md={5}>
         <CurrencySelect
-          charCode={currencuIn}
-          setValue={setCurrencuIn}
+          charCode={currencyIn}
+          setValue={setCurrencyIn}
           type={'in'}
         />
       </Grid>
       <Grid item md={5}>
         <CurrencySelect
-          charCode={currencuOut}
-          setValue={setCurrencuOut}
+          charCode={currencyOut}
+          setValue={setCurrencyOut}
           type={'out'}
         />
       </Grid>

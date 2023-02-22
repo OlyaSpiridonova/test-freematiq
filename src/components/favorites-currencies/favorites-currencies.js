@@ -9,7 +9,7 @@ function FavoritesCurrencies() {
         Избранные валютные пары
       </Typography>
       <Grid justifyContent="center" container>
-        <Grid item container md={8}>
+        <Grid justifyContent="center" spacing={4} item container md={8} xs={4}>
           <CurrencyPairs />
         </Grid>
         <FavoritesCurrenciesList />

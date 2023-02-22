@@ -28,7 +28,6 @@ function FavoritesCurrenciesList() {
 
   const handleClickDelete = (currencyPair) => {
     dispatch(currencyFavorite.deleteCurrencyFavorite(currencyPair.id));
-    console.log('delete');
   };
 
   return (
@@ -52,7 +51,7 @@ function FavoritesCurrenciesList() {
                 ({
                   id,
                   codeOut,
-                  codeIN,
+                  codeIn,
                   flagOut,
                   symbolOut,
                   unit,
@@ -69,7 +68,7 @@ function FavoritesCurrenciesList() {
                         height="16"
                         fallback={<Icon>flag</Icon>}
                       />{' '}
-                      {codeIN}
+                      {codeIn}
                     </TableCellCentered>
                     <TableCellCentered>
                       {valuteIn}, {symbolIn}

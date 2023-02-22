@@ -36,7 +36,6 @@ function CurrenciesList() {
     //eslint-disable-next-line
   }, []);
 
-  console.log(currencyList);
   return (
     <>
       <Typography component="h1" variant="h4" my={3}>
